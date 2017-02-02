@@ -5,22 +5,32 @@
 
 <xsl:output method="xml" version="1.0" indent="yes"/>
 
-<xsl:param name="reference_prefix">../../../doc/gtkmm-2.4/docs/reference/html/</xsl:param>
+<xsl:param name="reference_prefix"></xsl:param>
 
 <xsl:template match="/">
-  <book title="gtkmm 2.4 library Reference Manual"
-        name="gtkmm 2.4"
+  <book xmlns="http://www.devhelp.net/book" language="c"
+        title="STM32F1xx HAL Drivers"
+        name="STM32F1xx_HAL_Driver"
         link="{$reference_prefix}index.html">
   <chapters>
-    <sub name="Classes" link="{$reference_prefix}classes.html">
+    <sub name="Modules" link="{$reference_prefix}modules.html">
+      <xsl:apply-templates select="doxygenindex/compound[@kind='group']">
+        <xsl:sort select="."/>
+      </xsl:apply-templates>
+    </sub>
+    <sub name="Data Structures" link="{$reference_prefix}annotated.html">
+      <xsl:apply-templates select="doxygenindex/compound[@kind='struct']">
+        <xsl:sort select="."/>
+      </xsl:apply-templates>
+    </sub>
+    <sub name="Data Structure Index" link="{$reference_prefix}classes.html">
       <xsl:apply-templates select="doxygenindex/compound[@kind='class']">
         <xsl:sort select="."/>
       </xsl:apply-templates>
     </sub>
-    <sub name="Namespaces" link="{$reference_prefix}namespaces.html">
-      <xsl:apply-templates select="doxygenindex/compound[@kind='namespace']">
-        <xsl:sort select="."/>
-      </xsl:apply-templates>
+    <sub name="File List" link="{$reference_prefix}files.html">
+    </sub>
+    <sub name="Directories" link="{$reference_prefix}dirs.html">
     </sub>
   </chapters>
 
@@ -45,13 +55,14 @@
   <!--
   <function name="atk_set_value" link="atk-atkvalue.html#ATK-SET-VALUE"/>
   -->
+  <xsl:param name="name"><xsl:value-of select="name"/></xsl:param>
   <xsl:variable name="fqn">
     <xsl:call-template name="get-fully-qualified-name" />
   </xsl:variable>
   <xsl:variable name="link">
     <xsl:call-template name="get-member-link" />
   </xsl:variable>
-  <function name="{$fqn}" link="{$reference_prefix}{$link}"/>
+  <function name="{$name}" link="{$reference_prefix}{$link}"/>
 </xsl:template>
 
 <xsl:template match="member" mode="as-sub">
